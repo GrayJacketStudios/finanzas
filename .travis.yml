@@ -9,7 +9,8 @@ sudo: false
   - composer install --prefer-source --no-interaction --dev
   - php artisan key:generate
   - php artisan jwt:generate
- script:
+
+script:
   - vendor/bin/phpunit
   - composer tests-travis
   - composer require friendsofphp/php-cs-fixer ^2.2 --dev
