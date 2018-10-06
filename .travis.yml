@@ -1,26 +1,12 @@
-sudo: false
 language: php
+
 php:
   - 7.1
-  - 7.2
-  
+
 before_script:
   - cp .env.travis .env
   - composer self-update
-  - composer install --prefer-source --no-interaction --dev
-  - php artisan key:generate
-  - php artisan jwt:generate
+  - composer install --no-interaction
 
 script:
   - vendor/bin/phpunit
-  - composer tests-travis
-  - composer require friendsofphp/php-cs-fixer ^2.2 --dev
-  - composer phpcs
-  
-before_install:
-  - composer self-update --stable --no-interaction
-  - composer remove friendsofphp/php-cs-fixer --dev --no-update
-  - composer require laravel/framework:$LARAVEL illuminate/support:$LARAVEL orchestra/testbench:$TESTBENCH phpunit/phpunit:$PHPUNIT --no-update --no-interaction --dev
-install:
-  - travis_retry composer install --no-suggest --no-interaction
-  - composer info
