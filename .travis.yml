@@ -1,25 +1,24 @@
-sudo: false
- language: php
- php:
-  - 7.1
-  - 7.2
- before_script:
-  - cp .env.travis .env
-  - composer self-update
-  - composer install --prefer-source --no-interaction --dev
-  - php artisan key:generate
-  - php artisan jwt:generate
+os:
+  - linux
 
+language: php
+
+php:
+  - '7.1'
+  
+before_script:
+  - composer self-update
+  - composer install --no-interaction
+  - pear install pear/PHP_CodeSniffer
+  - phpenv rehash
+  - nvm install 7.7.1
+  - npm install npm@latest -g
+  - npm install -g jshint
+  - npm install
+  - cp .env.example .env
+  - php artisan key:generate
+  
 script:
   - vendor/bin/phpunit
-  - composer tests-travis
-  - composer require friendsofphp/php-cs-fixer ^2.2 --dev
-  - composer phpcs
-  
-before_install:
-  - composer self-update --stable --no-interaction
-  - composer remove friendsofphp/php-cs-fixer --dev --no-update
-  - composer require laravel/framework:$LARAVEL illuminate/support:$LARAVEL orchestra/testbench:$TESTBENCH phpunit/phpunit:$PHPUNIT --no-update --no-interaction --dev
- install:
-  - travis_retry composer install --no-suggest --no-interaction
-  - composer info
+  - phpcs --ignore=app/Http/Controllers/Auth,app/Http/Controllers/Controller.php app/Http/Controllers
+  - npm run production
